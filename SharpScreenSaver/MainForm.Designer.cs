@@ -53,20 +53,16 @@
 			this.tblLayout.Size = new System.Drawing.Size(1005, 478);
 			this.tblLayout.TabIndex = 0;
 			// 
-			// InitTimer
-			// 
-			this.InitTimer.Interval = 50;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1005, 478);
 			this.Controls.Add(this.tblLayout);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.KeyPreview = true;
 			this.Name = "MainForm";
-			this.Text = "Form1";
+			this.Text = "SharpScreenSaver";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.ResumeLayout(false);
 			this.PerformLayout();

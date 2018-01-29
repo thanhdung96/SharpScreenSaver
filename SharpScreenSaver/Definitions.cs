@@ -12,7 +12,7 @@ namespace SharpScreenSaver
 		private int CurrentIndex = 0;
 		Random rd = new Random();
 
-		private List<Thread> ThreadPool = new List<Thread>();
+		private List<Thread> ThreadPanelPool = new List<Thread>();
 		private List<Panel> PanelPool = new List<Panel>();
 	}
 }
