@@ -109,6 +109,7 @@ namespace SharpScreenSaver
 					PanelDelay[i] = (byte)(rd.Next(MIN_DELAY, MAX_DELAY));*/
 					Thread t = new Thread(new ParameterizedThreadStart(PanelTransition));
 					t.Start(i as object);
+					Thread.Sleep(10);
 				}
 			}
 		}
