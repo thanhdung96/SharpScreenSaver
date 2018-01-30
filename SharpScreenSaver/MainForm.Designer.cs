@@ -31,6 +31,8 @@
 			this.components = new System.ComponentModel.Container();
 			this.tblLayout = new System.Windows.Forms.TableLayoutPanel();
 			this.InitTimer = new System.Windows.Forms.Timer(this.components);
+			this.HideMouseTimer = new System.Windows.Forms.Timer(this.components);
+			this.EditPanelTimer = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
 			// 
 			// tblLayout
@@ -53,6 +55,14 @@
 			this.tblLayout.Size = new System.Drawing.Size(1005, 478);
 			this.tblLayout.TabIndex = 0;
 			// 
+			// HideMouseTimer
+			// 
+			this.HideMouseTimer.Interval = 5000;
+			// 
+			// EditPanelTimer
+			// 
+			this.EditPanelTimer.Interval = 1000;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -61,7 +71,10 @@
 			this.Controls.Add(this.tblLayout);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.KeyPreview = true;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "MainForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "SharpScreenSaver";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.ResumeLayout(false);
@@ -73,6 +86,8 @@
 
 		private System.Windows.Forms.TableLayoutPanel tblLayout;
 		private System.Windows.Forms.Timer InitTimer;
+		private System.Windows.Forms.Timer HideMouseTimer;
+		private System.Windows.Forms.Timer EditPanelTimer;
 	}
 }
 

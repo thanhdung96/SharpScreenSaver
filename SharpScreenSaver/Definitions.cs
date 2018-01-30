@@ -7,12 +7,19 @@ namespace SharpScreenSaver
 {
 	public partial class MainForm
 	{
-		private const int ThreadPoolSize = 16;
-		private const int Dimension = 4;
+		private const int TOTAL_PANELS = 16;
+		private const int DIMENSION = 4;
+		private const int MAX_DELAY = 4;
+		private const int MIN_DELAY = 1;
+		private const int MAX_COLOR = 255;
+		private const int MIN_COLOR = 0;
 		private int CurrentIndex = 0;
 		Random rd = new Random();
 
-		private List<Thread> ThreadPanelPool = new List<Thread>();
-		private List<Panel> PanelPool = new List<Panel>();
+		private List<byte> PanelDelay = new List<byte>();
+
+		public TimeSpan TimeoutToHide { get; private set; }
+		public DateTime LastMouseMove { get; private set; }
+		public bool IsHidden { get; private set; }
 	}
 }
