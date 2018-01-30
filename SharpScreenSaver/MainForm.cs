@@ -1,7 +1,8 @@
-﻿using System.Windows.Forms;
-using System.Threading;
-using System;
+﻿using System;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace SharpScreenSaver
 {
@@ -104,11 +105,50 @@ namespace SharpScreenSaver
 			{
 				if (PanelDelay[i] == 0)
 				{
-					tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = Color.FromArgb(rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR));
-					PanelDelay[i] = (byte)(rd.Next(MIN_DELAY, MAX_DELAY));
+					/*tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = Color.FromArgb(rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR));
+					PanelDelay[i] = (byte)(rd.Next(MIN_DELAY, MAX_DELAY));*/
+					Thread t = new Thread(new ParameterizedThreadStart(PanelTransition));
+					t.Start(i as object);
 				}
 			}
 		}
 		#endregion Timer Tick Event
+
+		#region Threading
+		private void PanelTransition(object PanelIndex)
+		{
+			int i = (int)PanelIndex;
+			Random RandomColor = new Random();
+			Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
+			Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
+			List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 25);
+
+			foreach (Color color in RGBLerp)
+			{
+				tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = color;
+				Thread.Sleep(40);
+			}
+			PanelDelay[i] = (byte)(RandomColor.Next(MIN_DELAY, MAX_DELAY));
+		}
+		public List<Color> RgbLinearInterpolate(Color start, Color end, int colorCount)
+		{
+			List<Color> ret = new List<Color>();
+
+			// linear interpolation lerp (r,a,b) = (1-r)*a + r*b = (1-r)*(ax,ay,az) + r*(bx,by,bz)
+			for (int n = 0; n < colorCount; n++)
+			{
+				double r = (double)n / (double)(colorCount - 1);
+				double nr = 1.0 - r;
+				double A = (nr * start.A) + (r * end.A);
+				double R = (nr * start.R) + (r * end.R);
+				double G = (nr * start.G) + (r * end.G);
+				double B = (nr * start.B) + (r * end.B);
+
+				ret.Add(Color.FromArgb((byte)A, (byte)R, (byte)G, (byte)B));
+			}
+
+			return ret;
+		}
+		#endregion Threading
 	}
 }
