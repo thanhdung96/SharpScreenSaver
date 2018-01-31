@@ -10,8 +10,8 @@ namespace SharpScreenSaver
 	{
 		private const int TOTAL_PANELS = 16;
 		private const int DIMENSION = 4;
-		private const int MAX_DELAY = 4;
-		private const int MIN_DELAY = 1;
+		private const int MAX_DELAY = 5;
+		private const int MIN_DELAY = 2;
 		private const int MAX_COLOR = 255;
 		private const int MIN_COLOR = 0;
 		private int CurrentIndex = 0;

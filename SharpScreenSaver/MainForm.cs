@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Threading;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace SharpScreenSaver
 {
@@ -126,17 +126,20 @@ namespace SharpScreenSaver
 		private void PanelTransition(object PanelIndex)
 		{
 			int i = (int)PanelIndex;
-			Random RandomColor = new Random();
-			Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
-			Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
-			List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 30);
-
-			foreach (Color color in RGBLerp)
+			lock (tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION))
 			{
-				tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = color;
-				Thread.Sleep(65);
+				Random RandomColor = new Random();
+				Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
+				Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
+				List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 24);
+
+				foreach (Color color in RGBLerp)
+				{
+					tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = color;
+					Thread.Sleep(60);
+				}
+				PanelDelay[i] = (byte)(RandomColor.Next(MIN_DELAY, MAX_DELAY));
 			}
-			PanelDelay[i] = (byte)(RandomColor.Next(MIN_DELAY, MAX_DELAY));
 		}
 		public List<Color> RgbLinearInterpolate(Color start, Color end, int colorCount)
 		{
