@@ -3,11 +3,14 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace SharpScreenSaver
 {
 	public partial class MainForm : Form
 	{
+		[DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		static extern EXECUTION_STATE SetThreadExecutionState(EXECUTION_STATE esFlags);
 		public MainForm()
 		{
 			InitializeComponent();
@@ -58,6 +61,8 @@ namespace SharpScreenSaver
 		void MainForm_Shown(object sender, EventArgs e)
 		{
 			this.HideMouseTimer.Enabled = true;
+			//keep screen awake
+			SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS | EXECUTION_STATE.ES_SYSTEM_REQUIRED);
 		}
 
 		void MainForm_KeyDown(object sender, KeyEventArgs e)
@@ -71,6 +76,8 @@ namespace SharpScreenSaver
 			this.InitTimer.Enabled = false;
 			this.HideMouseTimer.Enabled = false;
 			this.EditPanelTimer.Enabled = false;
+			//return screen to normal
+			SetThreadExecutionState(EXECUTION_STATE.ES_CONTINUOUS);
 		}
 		#endregion Form Events
 
@@ -122,12 +129,12 @@ namespace SharpScreenSaver
 			Random RandomColor = new Random();
 			Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
 			Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
-			List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 25);
+			List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 30);
 
 			foreach (Color color in RGBLerp)
 			{
 				tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = color;
-				Thread.Sleep(40);
+				Thread.Sleep(65);
 			}
 			PanelDelay[i] = (byte)(RandomColor.Next(MIN_DELAY, MAX_DELAY));
 		}
