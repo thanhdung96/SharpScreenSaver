@@ -1,0 +1,6 @@
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\bin\Release\SScreenSaver.exe.config
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\bin\Release\SScreenSaver.exe
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\obj\Release\SScreenSaver.csprojResolveAssemblyReference.cache
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\obj\Release\SScreenSaver.exe
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\obj\Release\SScreenSaver.MainForm.resources
+C:\Users\chi_b\Documents\Projects\SScreenSaver\SScreenSaver\obj\Release\SScreenSaver.csproj.GenerateResource.Cache
