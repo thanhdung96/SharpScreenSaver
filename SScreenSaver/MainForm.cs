@@ -8,10 +8,18 @@ namespace SScreenSaver
 {
 	public partial class MainForm : Form
 	{
+		#region Constructors
 		public MainForm()
 		{
 			InitializeComponent();
-
+			InitEvents();
+		}
+		public MainForm(Rectangle Bounds){
+			InitializeComponent();
+			this.Bounds=Bounds;
+			InitEvents();
+		}
+		private void InitEvents(){
 			this.Load += MainForm_Load;
 			this.KeyDown += MainForm_KeyDown;
 			this.FormClosing += MainForm_FormClosing;
@@ -26,6 +34,8 @@ namespace SScreenSaver
 			this.MouseMove += MainForm_MouseMove;
 		}
 
+		#endregion Constructors
+		
 		#region Hide mouse
 		void HideMouseTimer_Tick(object sender, EventArgs e)
 		{
@@ -63,7 +73,7 @@ namespace SScreenSaver
 		void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Escape)
-				this.Close();
+				Application.Exit();
 		}
 
 		void MainForm_FormClosing(object sender, FormClosingEventArgs e)
