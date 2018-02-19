@@ -1,4 +1,12 @@
-﻿namespace SharpScreenSaver
+﻿/*
+ * Created by SharpDevelop.
+ * User: chi_b
+ * Date: Feb.17.2018
+ * Time: 17:58
+ * 
+ * To change this template use Tools | Options | Coding | Edit Standard Headers.
+ */
+namespace SScreenSaver
 {
 	partial class MainForm
 	{
@@ -29,7 +37,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.tblLayout = new System.Windows.Forms.TableLayoutPanel();
 			this.InitTimer = new System.Windows.Forms.Timer(this.components);
 			this.HideMouseTimer = new System.Windows.Forms.Timer(this.components);
@@ -71,7 +78,6 @@
 			this.ClientSize = new System.Drawing.Size(1005, 478);
 			this.Controls.Add(this.tblLayout);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.KeyPreview = true;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
@@ -93,4 +99,3 @@
 		private System.Windows.Forms.Timer EditPanelTimer;
 	}
 }
-

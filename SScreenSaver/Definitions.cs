@@ -1,10 +1,9 @@
-﻿using System.Threading;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
 using System;
 using System.Runtime.InteropServices;
+using System.Drawing;
 
-namespace SharpScreenSaver
+namespace SScreenSaver
 {
 	public partial class MainForm
 	{
@@ -22,17 +21,18 @@ namespace SharpScreenSaver
 		public TimeSpan TimeoutToHide { get; private set; }
 		public DateTime LastMouseMove { get; private set; }
 		public bool IsHidden { get; private set; }
-
-
-		[FlagsAttribute]
-		public enum EXECUTION_STATE : uint
-		{
-			ES_AWAYMODE_REQUIRED = 0x00000040,
-			ES_CONTINUOUS = 0x80000000,
-			ES_DISPLAY_REQUIRED = 0x00000002,
-			ES_SYSTEM_REQUIRED = 0x00000001
-			// Legacy flag, should not be used.
-			// ES_USER_PRESENT = 0x00000004
-		}
+		private bool PreviewMode = false;
+		
+		[DllImport("user32.dll")]
+		static extern IntPtr SetParent(IntPtr hWndChild, IntPtr hWndNewParent);
+ 
+		[DllImport("user32.dll")]
+		static extern int SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+ 
+		[DllImport("user32.dll", SetLastError = true)]
+		static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+ 
+		[DllImport("user32.dll")]
+		static extern bool GetClientRect(IntPtr hWnd, out Rectangle lpRect);
 	}
 }
