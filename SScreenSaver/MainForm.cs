@@ -36,7 +36,7 @@ namespace SScreenSaver
 			GetClientRect(PreviewWndHandle, out ParentRect);
 			Size = ParentRect.Size;
 			Location = new Point(0, 0);
-			PreviewMode=true;
+			PreviewMode = true;
 		}
 		
 		private void InitEvents()
@@ -145,7 +145,13 @@ namespace SScreenSaver
 			lock (tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION)) {
 				Random RandomColor = new Random();
 				Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
-				Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
+				//pick new color with thread sleep for varier color
+				int red= RandomColor.Next(MIN_COLOR, MAX_COLOR);
+				Thread.Sleep(RandomColor.Next(MIN_DELAY, MAX_DELAY));
+				int green = RandomColor.Next(MIN_COLOR, MAX_COLOR);
+				Thread.Sleep(RandomColor.Next(MIN_DELAY, MAX_DELAY));
+				int blue = RandomColor.Next(MIN_COLOR, MAX_COLOR);
+				Color NewColor = Color.FromArgb(red, green, blue);
 				List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 24);
 
 				foreach (Color color in RGBLerp) {
