@@ -14,12 +14,33 @@ namespace SScreenSaver
 			InitializeComponent();
 			InitEvents();
 		}
-		public MainForm(Rectangle Bounds){
+		public MainForm(Rectangle Bounds)
+		{
 			InitializeComponent();
-			this.Bounds=Bounds;
+			this.Bounds = Bounds;
 			InitEvents();
 		}
-		private void InitEvents(){
+		public MainForm(IntPtr PreviewWndHandle)
+		{
+			InitializeComponent();
+ 
+			// Set the preview window as the parent of this window
+			SetParent(this.Handle, PreviewWndHandle);
+ 
+			// Make this a child window so it will close when the parent dialog closes
+			// GWL_STYLE = -16, WS_CHILD = 0x40000000
+			SetWindowLong(this.Handle, -16, new IntPtr(GetWindowLong(this.Handle, -16) | 0x40000000));
+ 
+			// Place our window inside the parent
+			Rectangle ParentRect;
+			GetClientRect(PreviewWndHandle, out ParentRect);
+			Size = ParentRect.Size;
+			Location = new Point(0, 0);
+			PreviewMode=true;
+		}
+		
+		private void InitEvents()
+		{
 			this.Load += MainForm_Load;
 			this.KeyDown += MainForm_KeyDown;
 			this.FormClosing += MainForm_FormClosing;
@@ -40,8 +61,7 @@ namespace SScreenSaver
 		void HideMouseTimer_Tick(object sender, EventArgs e)
 		{
 			TimeSpan elaped = DateTime.Now - LastMouseMove;
-			if (elaped >= TimeoutToHide && !IsHidden)
-			{
+			if (elaped >= TimeoutToHide && !IsHidden) {
 				Cursor.Hide();
 				IsHidden = true;
 			}
@@ -51,8 +71,7 @@ namespace SScreenSaver
 		{
 			LastMouseMove = DateTime.Now;
 
-			if (IsHidden)
-			{
+			if (IsHidden) {
 				Cursor.Show();
 				IsHidden = false;
 			}
@@ -72,7 +91,7 @@ namespace SScreenSaver
 
 		void MainForm_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Escape)
+			if (e.KeyCode == Keys.Escape && !this.PreviewMode)
 				Application.Exit();
 		}
 
@@ -87,8 +106,7 @@ namespace SScreenSaver
 		#region Timer Tick Event
 		void InitTimer_Tick(object sender, EventArgs e)
 		{
-			if (CurrentIndex < TOTAL_PANELS)
-			{
+			if (CurrentIndex < TOTAL_PANELS) {
 				Panel pnl = new Panel();
 				Color color = Color.FromArgb(rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR));
 				pnl.BackColor = color;
@@ -97,9 +115,7 @@ namespace SScreenSaver
 				this.tblLayout.Controls.Add(pnl);
 				PanelDelay.Add((byte)(rd.Next(MIN_DELAY, MAX_DELAY)));
 				CurrentIndex += 1;
-			}
-			else
-			{
+			} else {
 				this.EditPanelTimer.Enabled = true;
 				this.InitTimer.Enabled = false;
 			}
@@ -107,19 +123,16 @@ namespace SScreenSaver
 
 		void EditPanelTimer_Tick(object sender, EventArgs e)
 		{
-			for (int i = 0; i < TOTAL_PANELS; i++)
-			{
+			for (int i = 0; i < TOTAL_PANELS; i++) {
 				PanelDelay[i]--;
 			}
-			for (int i = 0; i < TOTAL_PANELS; i++)
-			{
-				if (PanelDelay[i] == 0)
-				{
+			for (int i = 0; i < TOTAL_PANELS; i++) {
+				if (PanelDelay[i] == 0) {
 					/*tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = Color.FromArgb(rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR), rd.Next(MIN_COLOR, MAX_COLOR));
 					PanelDelay[i] = (byte)(rd.Next(MIN_DELAY, MAX_DELAY));*/
 					Thread t = new Thread(new ParameterizedThreadStart(PanelTransition));
 					t.Start(i as object);
-					Thread.Sleep(10);
+					Thread.Sleep(9);
 				}
 			}
 		}
@@ -129,19 +142,17 @@ namespace SScreenSaver
 		private void PanelTransition(object PanelIndex)
 		{
 			int i = (int)PanelIndex;
-			lock (tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION))
-			{
+			lock (tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION)) {
 				Random RandomColor = new Random();
 				Color OldColor = tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor;
 				Color NewColor = Color.FromArgb(RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR), RandomColor.Next(MIN_COLOR, MAX_COLOR));
 				List<Color> RGBLerp = RgbLinearInterpolate(OldColor, NewColor, 24);
 
-				foreach (Color color in RGBLerp)
-				{
+				foreach (Color color in RGBLerp) {
 					tblLayout.GetControlFromPosition(i % DIMENSION, i / DIMENSION).BackColor = color;
 					Thread.Sleep(60);
 				}
-				RGBLerp=null;
+				RGBLerp = null;
 				PanelDelay[i] = (byte)(RandomColor.Next(MIN_DELAY, MAX_DELAY));
 			}
 		}
@@ -150,8 +161,7 @@ namespace SScreenSaver
 			List<Color> ret = new List<Color>();
 
 			// linear interpolation lerp (r,a,b) = (1-r)*a + r*b = (1-r)*(ax,ay,az) + r*(bx,by,bz)
-			for (int n = 0; n < colorCount; n++)
-			{
+			for (int n = 0; n < colorCount; n++) {
 				double r = (double)n / (double)(colorCount - 1);
 				double nr = 1.0 - r;
 				double A = (nr * start.A) + (r * end.A);

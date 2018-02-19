@@ -34,7 +34,14 @@ namespace SScreenSaver
 				if (firstArgument == "/c") {           // Configuration mode
 					// TODO
 				} else if (firstArgument == "/p") {      // Preview mode
-					// TODO
+					if (secondArgument == null) {
+						MessageBox.Show("Sorry, but the expected window handle was not provided.",
+							"ScreenSaver", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						return;
+					}
+ 
+					IntPtr previewWndHandle = new IntPtr(long.Parse(secondArgument));
+					Application.Run(new MainForm(previewWndHandle));
 				} else if (firstArgument == "/s") {      // Full-screen mode
 					ShowScreenSaver();
 					Application.Run();
@@ -44,8 +51,8 @@ namespace SScreenSaver
 						MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
 			} else {    // No arguments - treat like /c
-					ShowScreenSaver();
-					Application.Run();
+				ShowScreenSaver();
+				Application.Run();
 			}           
 		}
 		
