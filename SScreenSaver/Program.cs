@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SScreenSaver
@@ -10,12 +10,12 @@ namespace SScreenSaver
 	/// </summary>
 	internal sealed class Program
 	{
-		/// <summary>
-		/// Program entry point.
-		/// </summary>
 		[STAThread]
 		private static void Main(string[] args)
 		{
+			Process CurrentProcess = Process.GetCurrentProcess();
+			CurrentProcess.PriorityClass = ProcessPriorityClass.High;
+			
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
